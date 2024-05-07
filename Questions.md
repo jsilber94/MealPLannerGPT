@@ -1,44 +1,52 @@
+# MealPlannerGPT
+
 ## Prompt Engineering
 
-- find alternatives to rejected ingredients
-- give examples of what I want to see
-- detailed and specific instructions
+- Give examples of what I want to see
+- Detailed and specific instructions
+
+- Find alternatives to rejected ingredients
+- Measurements for ingredients should be easy
 
 ### Advanced prompt engineering
 
-- Zero Shot Reasoners 
-    - step by step
+- Zero Shot Reasoners
+  - step by step predictions for better results
 - Chain of Thought Prompting
-  - use the previous answers/conversation and build on it for context awareness ( works with sufficiently large language models.)
+  - use the previous answers/conversation and build on it for context awareness (works with sufficiently large language models)
 - Few Shot Prompting for in-context learning.
   - generate more than 14 meals to improve results
 - Generated Knowledge Prompting ex. greek salad
+- Self Guided learning
+  - use correct output to train the model
 
-## Product and not POC
-- generate ingredient list at the same time as each meal
-- specific prompt for each meal. Generate a meal with the limitations.
+## Product quality
+
+- Generate ingredient list at the same time as each meal.
+- Specific prompt for each meal. Generate a meal with the limitations.
 - Self-Consistency
-    - generate numerous meal plans before 
-- Provide ingredient needed from the meal data
+  - generate numerous meal plans before
+- Provide ingredient needed from the meal data.
 
 ## Ideas/Improvements:
 
-- Follow up emails
-- Allow family to rate meals, ingredients
-- Classify ingredients as red, yellow, green, or blue (adventurous)
-- Health rating of food
-- Types of diets: vegan, keto, paleo
-- Different meals for adults and children
-- Integrate with recipe api
+- Evaluate ingredients and assign a score.
+- Follow up emails.
+- Allow family to rate meals and ingredients.
+- Classify ingredients as red, yellow, green, or blue (adventurous).
+- Health rating of food.
+- Types of diets: vegan, keto, paleo.
+- Different meals for adults and children.
+- Integrate with recipe api.
 
-## Things of note:
+## Things Of Note:
 
 - Keep rejecting meals, dont add the the rejected ones back as an option?
-- Each meal consists of protein, vegetable, and starch
-- 2500 calories per adult
-- 1500 calories per child
-- 70% of meals should be based on existing data
-- 30% of meals should be adventurous
+- Each meal consists of protein, vegetable, and starch.
+- 2500 calories per adult.
+- 1500 calories per child.
+- 70% of meals should be based on existing data.
+- 30% of meals should be adventurous.
 
 ## Questions/Clarifications
 
