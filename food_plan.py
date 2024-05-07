@@ -1,6 +1,6 @@
 import os
-
 import json
+
 from openai import OpenAI
 from dotenv import load_dotenv
 
@@ -43,46 +43,28 @@ def send_user_message(message):
     return completion
 
 
-def get_plan_prompts():
-    food_plan_prompts = config["food_plan_prompts"]
-    prompts = ""
-    for key in food_plan_prompts[0]:
-        prompts += " " + food_plan_prompts[0][key]
-    cleaned_food_plan_prompts = cleanse_prompt(prompts)
-    return cleaned_food_plan_prompts
+def get_prompt(raw_prompts):
+    populated_prompts = map(replace_variables, raw_prompts)
+    return " ".join(populated_prompts)
 
 
-def get_ingredient_prompts():
-    ingredient_prompts = config["ingredient_prompts"]
-    prompts = ""
-    for key in ingredient_prompts[0]:
-        prompts += " " + ingredient_prompts[0][key]
-    cleaned_ingredient_prompts = cleanse_prompt(prompts)
-    return cleaned_ingredient_prompts
-
-
-def cleanse_prompt(prompts):
-    prompts = prompts.replace("$adults_amount", str(config["adults_amount"]))
-    prompts = prompts.replace(
-        "$children_amount", str(config["children_amount"]))
-    prompts = prompts.replace("$allergies", config["allergies"])
-    prompts = prompts.replace("$disliked_food", config["disliked_food"])
-    prompts = prompts.replace("$lunch_amount", str(config["lunch_amount"]))
-    prompts = prompts.replace("$dinner_amount", str(config["dinner_amount"]))
-    prompts = prompts.replace("$keyword", config["keyword"])
-    prompts = prompts.replace("$skipped_meals", config["skipped_meals"])
-    prompts = prompts.replace("$wanted_meals", config["wanted_meals"])
+def replace_variables(prompts):
+    for key in config['variables']:
+        if "prompt" not in key:
+            prompts = prompts.replace(f"${key}", str(config["variables"][key]))
     return prompts
 
 
 def cleanse_response(chat_resonse):
-    chat_resonse = chat_resonse.replace(config["allergies"], "")
-    chat_resonse = chat_resonse.replace(config["disliked_food"], "")
+    # qae
+    chat_resonse = chat_resonse.replace(config["variables"]["allergies"], "")
+    chat_resonse = chat_resonse.replace(
+        config["variables"]["disliked_food"], "")
     return chat_resonse
 
 
 def generate_messages(prompts, meals=None):
-    completion = send_user_message(prompts)
+    completion = send_user_message(f"{prompts} {meals}")
     chat_resonse = completion.choices[0].message.content
     cleansed_response = cleanse_response(chat_resonse)
     print(cleansed_response, "\n")
@@ -99,18 +81,18 @@ def change_meals(chat_response):
 
 def no_input():
     init_gpt()
-    food_plan_prompts = get_plan_prompts()
+    food_plan_prompts = get_prompt(config["food_plan_prompts"])
     food_plan = generate_messages(food_plan_prompts)
     # print(food_plan_prompts, "\n")
-    ingredient_prompts = get_ingredient_prompts()
+    ingredient_prompts = get_prompt(config["ingredient_prompts"])
     # print(ingredient_prompts, "\n")
     meal_plan_ingredients = generate_messages(ingredient_prompts, food_plan)
-    print(meal_plan_ingredients, "\n")
+    # print(meal_plan_ingredients, "\n")
 
 
 def some_input():
     init_gpt()
-    food_plan_prompts = get_plan_prompts()
+    food_plan_prompts = get_prompt(config["food_plan_prompts"])
     food_plan = generate_messages(food_plan_prompts)
     meals = change_meals(food_plan)
     print(meals)
