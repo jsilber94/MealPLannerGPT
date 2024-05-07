@@ -45,13 +45,19 @@ def send_user_message(message):
 
 def get_plan_prompts():
     food_plan_prompts = config["food_plan_prompts"]
-    cleaned_food_plan_prompts = cleanse_prompt(food_plan_prompts)
+    prompts = ""
+    for key in food_plan_prompts[0]:
+        prompts += " " + food_plan_prompts[0][key]
+    cleaned_food_plan_prompts = cleanse_prompt(prompts)
     return cleaned_food_plan_prompts
 
 
 def get_ingredient_prompts():
     ingredient_prompts = config["ingredient_prompts"]
-    cleaned_ingredient_prompts = cleanse_prompt(ingredient_prompts)
+    prompts = ""
+    for key in ingredient_prompts[0]:
+        prompts += " " + ingredient_prompts[0][key]
+    cleaned_ingredient_prompts = cleanse_prompt(prompts)
     return cleaned_ingredient_prompts
 
 
@@ -75,24 +81,12 @@ def cleanse_response(chat_resonse):
     return chat_resonse
 
 
-def generate_plan():
-    food_plan_prompts = get_plan_prompts()
-    # print(food_plan_prompts, "\n")
-    completion = send_user_message(food_plan_prompts)
+def generate_messages(prompts, meals=None):
+    completion = send_user_message(prompts)
     chat_resonse = completion.choices[0].message.content
     cleansed_response = cleanse_response(chat_resonse)
     print(cleansed_response, "\n")
     return cleansed_response
-
-
-def generate_ingredient_list(meals):
-    ingredient_prompts = get_ingredient_prompts()
-    # print(ingredient_prompts, "\n")
-    message = f"{ingredient_prompts} {meals}"
-    completion = send_user_message(message)
-    chat_resonse = completion.choices[0].message.content
-    cleansed_response = cleanse_response(chat_resonse)
-    print(cleansed_response, "\n")
 
 
 def change_meals(chat_response):
@@ -105,14 +99,20 @@ def change_meals(chat_response):
 
 def no_input():
     init_gpt()
-    chat_response = generate_plan()
-    generate_ingredient_list(chat_response)
+    food_plan_prompts = get_plan_prompts()
+    food_plan = generate_messages(food_plan_prompts)
+    # print(food_plan_prompts, "\n")
+    ingredient_prompts = get_ingredient_prompts()
+    # print(ingredient_prompts, "\n")
+    meal_plan_ingredients = generate_messages(ingredient_prompts, food_plan)
+    print(meal_plan_ingredients, "\n")
 
 
 def some_input():
     init_gpt()
-    chat_response = generate_plan()
-    meals = change_meals(chat_response)
+    food_plan_prompts = get_plan_prompts()
+    food_plan = generate_messages(food_plan_prompts)
+    meals = change_meals(food_plan)
     print(meals)
 
 
