@@ -16,7 +16,8 @@
   - use the previous answers/conversation and build on it for context awareness (works with sufficiently large language models)
 - Few Shot Prompting for in-context learning.
   - generate more than 14 meals to improve results
-- Generated Knowledge Prompting ex. greek salad
+- Generated Knowledge Prompting
+  - greek salad ingredients
 - Self Guided learning
   - use correct output to train the model
 
